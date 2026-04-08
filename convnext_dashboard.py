@@ -26,7 +26,15 @@ import torch.nn as nn
 import torchvision.models as models
 from PIL import Image
 from torchvision.transforms import CenterCrop, Compose, Normalize, Resize, ToTensor
-from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download, login
+
+# ── Hugging Face Authentication ────────────────────────────────────────────────
+hf_token = st.secrets.get("HF_TOKEN") or os.getenv("HF_TOKEN")
+if hf_token:
+    login(token=hf_token)
+    print("Token cargado correctamente")
+else:
+    print("Corriendo sin token (modo limitado)")
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(

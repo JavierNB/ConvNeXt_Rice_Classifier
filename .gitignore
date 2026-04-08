@@ -2,3 +2,4 @@ desktop.ini
 best_model_finetuning.pt
 *.pt
 .qodo
+.streamlit/secrets.toml
