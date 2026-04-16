@@ -77,7 +77,7 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 
 /* Hero banner */
 .hero {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    background: linear-gradient(135deg, #A0192E, #C49A6C);
     border-radius: 16px;
     padding: 36px 40px;
     margin-bottom: 28px;
@@ -100,58 +100,69 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif; }
 
 /* KPI cards */
 .kpi-card {
-    background: #1a1a2e;
-    border: 1px solid #2d2d4e;
+    background: #A0192E;
+    border: 1px solid #C49A6C;
     border-radius: 12px;
     padding: 18px 22px;
     text-align: center;
-    color: white;
+    color: #ffffff;
 }
-.kpi-card .val { font-family: 'Space Mono', monospace; font-size: 1.9rem; color: #a78bfa; }
-.kpi-card .lbl { font-size: .78rem; opacity: .6; margin-top: 4px; text-transform: uppercase; letter-spacing: .06em; }
+.kpi-card .val { font-family: 'Space Mono', monospace; font-size: 1.9rem; color: #ffffff; }
+.kpi-card .lbl { font-size: .78rem; color: #ffffff; opacity: .8; margin-top: 4px; text-transform: uppercase; letter-spacing: .06em; }
 
 /* Section headers */
 .sec-title {
     font-family: 'Space Mono', monospace;
     font-size: 1.05rem;
     letter-spacing: .04em;
-    color: #a78bfa;
+    color: #ffffff;
     text-transform: uppercase;
     margin: 0 0 12px;
-    border-bottom: 1px solid #2d2d4e;
+    border-bottom: 1px solid #C49A6C;
     padding-bottom: 6px;
 }
 
 /* Info banner */
 .info-banner {
-    background: #1e1b4b;
-    border-left: 4px solid #818cf8;
+    background: #A0192E;
+    border-left: 4px solid #C49A6C;
     border-radius: 0 10px 10px 0;
     padding: 12px 16px;
     font-size: .88rem;
-    color: #c7d2fe;
+    color: #ffffff;
     margin-bottom: 16px;
 }
 
 /* Tag pills */
 .tag {
     display: inline-block;
-    background: #312e81;
-    color: #c7d2fe;
+    background: #C49A6C;
+    color: #ffffff;
     border-radius: 999px;
     padding: 2px 10px;
     font-size: .78rem;
     margin: 2px 3px;
+    border: 1px solid #C49A6C;
 }
 
 /* Sidebar */
-[data-testid="stSidebar"] { background: #0f0c29; }
-[data-testid="stSidebar"] * { color: #e2e8f0 !important; }
+[data-testid="stSidebar"] { background: #A0192E; }
+[data-testid="stSidebar"] * { color: #ffffff !important; }
+
+/* Code blocks in sidebar */
+[data-testid="stSidebar"] .stCodeBlock pre,
+[data-testid="stSidebar"] .stCodeBlock code {
+    color: #212529 !important;
+    background-color: #f8f9fa !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
+    st.image("UARPP-LogoV2.png", width='stretch', caption="University of Arkansas System")
+    st.image("itesm_logo.png", width='stretch', caption="Instituto Tecnológico y de Estudios Superiores de Monterrey")
+    st.divider()
     st.markdown("## 🧬 ConvNeXt-Base")
     st.markdown("**Image Classification Dashboard**")
     st.divider()
@@ -165,6 +176,9 @@ with st.sidebar:
     st.divider()
     st.markdown("### 📐 Input pipeline")
     st.code("Resize(256)\nCenterCrop(224)\nToTensor()\nNormalize(\n  μ=[.485,.456,.406]\n  σ=[.229,.224,.225]\n)", language="python")
+    st.divider()
+    st.markdown("### 👥 Corresponding Authors")
+    st.markdown("**Model training, Research & Dashboard:** \n* Atoany Nazareth Fierro Radilla (afierror@tec.mx)\n\n* Francisco Javier Navarro (fj.navarro.barron@tec.mx)\n\n**Dataset curation & project supervision:** \n* Alan Roberto Vázquez Alcocer (alanrvazquez@tec.mx)")
 
 # ── Hero ───────────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -278,7 +292,7 @@ with tab_inf:
 
             # ── Top-K bar chart ──────────────────────────────────────────────
             st.markdown(f'<p class="sec-title">Top-{top_k} predictions</p>', unsafe_allow_html=True)
-            bar_colors = ["#818cf8"] + ["#4b5563"] * (top_k - 1)
+            bar_colors = ["#A0192E"] + ["#C49A6C"] * (top_k - 1)
             fig_bar = go.Figure(go.Bar(
                 x=[p * 100 for p in top_probs],
                 y=top_classes,
@@ -318,7 +332,7 @@ with tab_inf:
                 x=CLASS_NAMES,
                 y=[probs[i] * 100 for i in range(NUM_CLASSES)],
                 marker_color=[
-                    "#818cf8" if CLASS_NAMES[i] == pred_cls else "#374151"
+                    "#A0192E" if CLASS_NAMES[i] == pred_cls else "#C49A6C"
                     for i in range(NUM_CLASSES)
                 ],
                 hovertemplate="%{x}: %{y:.4f}%<extra></extra>",
@@ -392,8 +406,8 @@ with tab_perf:
         st.markdown('<p class="sec-title">F1-Score per class</p>', unsafe_allow_html=True)
         fig_f1 = px.bar(
             PERF_DF, x="Class", y="F1-Score",
-            color="F1-Score", color_continuous_scale="Purples",
-            range_y=[0.85, 1.0],
+            color="F1-Score", color_continuous_scale=['#C49A6C', '#A0192E'],
+            range_y=[0.8, 1.0],
             text=PERF_DF["F1-Score"].apply(lambda v: f"{v:.3f}"),
         )
         fig_f1.update_traces(textposition="outside")
@@ -412,15 +426,15 @@ with tab_perf:
         fig_pr = go.Figure()
         fig_pr.add_trace(go.Bar(
             name="Precision", x=CLASS_NAMES, y=_PRECISION,
-            marker_color="#818cf8",
+            marker_color="#A0192E",
         ))
         fig_pr.add_trace(go.Bar(
             name="Recall", x=CLASS_NAMES, y=_RECALL,
-            marker_color="#34d399",
+            marker_color="#19A08B", # color complementario
         ))
         fig_pr.update_layout(
             barmode="group",
-            yaxis=dict(range=[0.85, 1.0], gridcolor="rgba(255,255,255,0.07)", color="#9ca3af"),
+            yaxis=dict(range=[0.8, 1.0], gridcolor="rgba(255,255,255,0.07)", color="#9ca3af"),
             xaxis=dict(tickangle=40, color="#9ca3af"),
             height=360, margin=dict(t=10, b=60),
             plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
@@ -438,13 +452,13 @@ with tab_perf:
         vals   = _F1 + [_F1[0]]
         fig_r = go.Figure(go.Scatterpolar(
             r=vals, theta=cats, fill="toself",
-            line_color="#818cf8", fillcolor="rgba(129,140,248,.25)",
-            marker=dict(size=6, color="#818cf8"),
+            line_color="#C49A6C", fillcolor="rgba(196,154,108,.6)",
+            marker=dict(size=6, color="#C49A6C"),
         ))
         fig_r.update_layout(
             polar=dict(
-                radialaxis=dict(visible=True, range=[0.85, 1.0],
-                                color="#9ca3af", gridcolor="rgba(255,255,255,0.1)"),
+                radialaxis=dict(visible=True, range=[0.8, 1.0],
+                                color="#9ca3af", gridcolor="rgba(255,255,255,0.1)"),#A0192E
                 angularaxis=dict(color="#9ca3af"),
                 bgcolor="rgba(0,0,0,0)",
             ),
@@ -458,7 +472,7 @@ with tab_perf:
         st.markdown('<p class="sec-title">Support distribution</p>', unsafe_allow_html=True)
         fig_sup = px.pie(
             PERF_DF, names="Class", values="Support",
-            color_discrete_sequence=px.colors.qualitative.Pastel,
+            color_discrete_sequence=px.colors.qualitative.Light24,
             hole=0.45,
         )
         fig_sup.update_traces(textposition="outside", textinfo="label+percent")
@@ -483,8 +497,8 @@ with tab_perf:
     })
     fig_acc = px.bar(
         acc_df, x="Class", y="Accuracy",
-        color="Accuracy", color_continuous_scale="Teal",
-        range_y=[0.85, 1.0],
+        color="Accuracy", color_continuous_scale=['#C49A6C', '#A0192E'],
+        range_y=[0.8, 1.0],
         custom_data=["Correct", "Total"],
         text=acc_df["Accuracy"].apply(lambda v: f"{v*100:.1f}%"),
     )
